@@ -305,7 +305,7 @@ public class GamePanel extends JComponent implements MouseListener {
 
 
             // load all white images
-            whiteImages[0] = ImageIO.read(new File("PIECES/WHITE_PAWN.PNG"));
+            whiteImages[0] = ImageIO.read(new File("PIECES/PawnHome.png"));
             whiteImages[1] = ImageIO.read(new File("PIECES/WHITE_KNIGHT.PNG"));
             whiteImages[2] = ImageIO.read(new File("PIECES/WHITE_BISHOP.PNG"));
             whiteImages[3] = ImageIO.read(new File("PIECES/WHITE_ROOK.PNG"));
