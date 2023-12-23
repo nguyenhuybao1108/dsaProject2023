@@ -1,16 +1,17 @@
 package chess;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
-import java.awt.Color;
+public class NewyearDecorator extends Decorator {
 
-public class ChristmasDecorator extends Decorator {
-    public ChristmasDecorator(IComponent component) {
+    public NewyearDecorator(IComponent component) {
         super(component);
+        // TODO Auto-generated constructor stub
     }
 
-    final Color lightColor = new Color(0, 255, 0, 255);
-    final Color darkColor = new Color(255, 0, 0, 255);
+    final Color lightColor = new Color(0, 0, 255, 255);
+    final Color darkColor = new Color(255, 255, 0, 255);
 
     private void addChristmasTheme(Graphics g, int sW, int sH) {
         // draw a light background
@@ -38,4 +39,5 @@ public class ChristmasDecorator extends Decorator {
         super.drawBoard(g, sW, sH);
         addChristmasTheme(g, sW, sH);
     }
+
 }

@@ -24,6 +24,25 @@ import java.util.List;
  * @author Paul
  */
 public class GamePanel extends JComponent implements MouseListener, IComponent {
+    public String title = "N";
+
+    public void Colo(Graphics g, int sW, int sH) {
+
+        switch (title) {
+            case "C":
+                ChristmasDecorator c = new ChristmasDecorator(this);
+                c.drawBoard(g, sW, sH);
+                break;
+            case "N":
+                NewyearDecorator n = new NewyearDecorator(this);
+                n.drawBoard(g, sW, sH);
+                break;
+            default:
+                drawBoard(g, sW, sH);
+                break;
+        }
+
+    }
 
     private enum GameStatus {
         Idle, Error, Started, Checkmate, Stalemate
@@ -446,6 +465,7 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         int h = getHeight();
 
         // square height and width
+
         int sW = w / 8;
         int sH = h / 8;
 
@@ -456,9 +476,8 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         Graphics g = buffer.getGraphics();
 
         // draw the board to the buffer
-        drawBoard(g, sW, sH);
-        ChristmasDecorator c = new ChristmasDecorator(this);
-        c.drawBoard(g, sW, sH);
+
+        Colo(g, sW, sH);
 
         drawHelperCircles(g, sW, sH);
 
