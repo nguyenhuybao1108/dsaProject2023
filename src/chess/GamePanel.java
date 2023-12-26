@@ -25,11 +25,14 @@ import java.util.List;
 public class GamePanel extends JComponent implements MouseListener {
     
     private enum GameStatus {Idle, Error, Started, Checkmate, Stalemate};
+     public enum  Gamemode {HUMAN , AI};
     
     GameStatus status = GameStatus.Idle;
     boolean imagesLoaded = false;
     
     Board gameBoard;
+    boolean FinishedSelect = false;  // use this to know when the user finish set up the Gamemode
+                                                        // to start running the game
     
     // piece selected by the user
     Piece selectedPiece = null;
@@ -70,7 +73,7 @@ public class GamePanel extends JComponent implements MouseListener {
         // creates a new board
         gameBoard = new Board(true);
         status = GameStatus.Started;
-        
+
         // resets variables
         selectedPiece = null;
         invalidPiece = null;
@@ -91,17 +94,27 @@ public class GamePanel extends JComponent implements MouseListener {
                 "New 1-Player game",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                new Object[] {"Easy", "Normal"},
+                new Object[] {"Easy", "Hard"},
                 "Easy");
         
         // interprets JOptionPane result
-        if (level == null)
+        if (level == null){
+            FinishedSelect = false;
             return;
-        else
-            if (level.toString().equals("Easy"))
+        }
+        else{
+            if (level.toString().equals("Easy")){
                 aiDepth = 2;
-            else 
+                FinishedSelect = false;
+            }
+
+            else{
                 aiDepth = 3;
+                FinishedSelect = false;
+            }
+            ;
+        }
+
            
         // creates a JOptionPane to ask the user for the ai color
         Object color = JOptionPane.showInputDialog(this, "Select AI Color:", 
@@ -112,19 +125,29 @@ public class GamePanel extends JComponent implements MouseListener {
                 "Black");
         
         // interprets JOptionPane result
-        if (color == null)
+        if (color == null){
+            FinishedSelect =  false;
             return;
-        else
-            if (color.toString().equals("White"))
+        }
+        else{
+            if (color.toString().equals("White")){
                 aiColor = Piece.Color.White;
-            else
+                FinishedSelect = true;
+            }
+
+
+            else{
                 aiColor = Piece.Color.Black;
-        
+                FinishedSelect = true;
+            }
+        }
         // creates a new game
         newGame();
         // then sets the ai for the board
         gameBoard.setAi(new Ai(aiColor, aiDepth));
-        
+        System.out.println("AI MODE IS CHOOSE");
+
+
         // simulates a click event to prompt the ai to make the first move
         if (aiColor == Piece.Color.White)
             mousePressed(null);
@@ -305,7 +328,7 @@ public class GamePanel extends JComponent implements MouseListener {
 
 
             // load all white images
-            whiteImages[0] = ImageIO.read(new File("PIECES/PawnHome.png"));
+            whiteImages[0] = ImageIO.read(new File("PIECES/WHITE_PAWN.PNG"));
             whiteImages[1] = ImageIO.read(new File("PIECES/WHITE_KNIGHT.PNG"));
             whiteImages[2] = ImageIO.read(new File("PIECES/WHITE_BISHOP.PNG"));
             whiteImages[3] = ImageIO.read(new File("PIECES/WHITE_ROOK.PNG"));
@@ -350,12 +373,22 @@ public class GamePanel extends JComponent implements MouseListener {
             int w = getWidth();
             int h = getHeight();
 
+            Point panelLocation = getLocationOnScreen();
+            int mouseX = e.getXOnScreen() - panelLocation.x;
+            int mouseY = e.getYOnScreen() - panelLocation.y;
+            int squareSize = Math.min(getWidth(),getHeight())/8;
+            int boardX =  mouseX /squareSize -1   ;
+            int  boardY =  mouseY / squareSize    ;
+
+
+
+
             // respond to player action
-            if (gameBoard.getAi() == null || 
-                gameBoard.getAi().getColor() != gameBoard.getTurn()) { 
+            if (gameBoard.getAi() == null ||
+                gameBoard.getAi().getColor() != gameBoard.getTurn()) {
                 // turn mouse click coordinates into board coordinates
-                Point boardPt = new Point(e.getPoint().x / (w / 8),
-                        e.getPoint().y / (h / 8));
+                Point boardPt = new Point(boardX,
+                        boardY);
 
                 // if no piece has been selected yet
                 if(selectedPiece == null) {
@@ -439,8 +472,8 @@ public class GamePanel extends JComponent implements MouseListener {
      */
     @Override
     protected void paintComponent(Graphics gr) {
-        int w = getWidth();
-        int h = getHeight();
+        int w = getWidth()-100;              // use this to set the width of the board
+        int h = getHeight();                     //
 
         // square height and width
         int sW = w / 8;
@@ -453,7 +486,7 @@ public class GamePanel extends JComponent implements MouseListener {
         Graphics g = buffer.getGraphics();
 
         // draw the board to the buffer
-        drawBoard(g, sW, sH);        
+        drawBoard(g, sW, sH);
         
         drawHelperCircles(g, sW, sH);
         

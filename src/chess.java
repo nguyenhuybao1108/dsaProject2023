@@ -4,6 +4,7 @@
  */
 
 import chessgame.GameWindow;
+import chessgame.Main_screen_chess;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -102,14 +103,17 @@ public class chess extends javax.swing.JFrame {
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {
        this.dispose();
-       GameWindow gw = new GameWindow();
-       JFrame frame = new JFrame();
-       frame.setSize(this.getWidth(), this.getHeight());
-       frame.add(gw);
-       frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-       frame.setLocationRelativeTo(null);
-       frame.setVisible(true);
-
+       System.out.println(this.getWidth() + " + " +  this.getHeight());
+    //   GameWindow gw = new GameWindow();
+        Main_screen_chess msc = new Main_screen_chess();
+//       JFrame frame = new JFrame();
+//     //  frame.setSize(1200, 800);         // use this to change the size of the game screen
+//        frame.setSize(this.getWidth(), this.getHeight());
+//       frame.add(msc);
+//       frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//       frame.setLocationRelativeTo(null);
+//       frame.setVisible(true);
+          msc.setup();
 
     }
 

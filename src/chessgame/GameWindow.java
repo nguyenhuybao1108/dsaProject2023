@@ -227,13 +227,16 @@ public class GameWindow extends JPanel {
 
     GamePanel gameScreen;
 
-    public GameWindow() {
+    public GameWindow(GamePanel gp) {
         initComponents();
-        init();
+        init(gp);
     }
 
-    private void init() {
-        gameScreen = new GamePanel(getWidth(), getHeight());
+    private void init(GamePanel gp) {
+//        gameScreen = new GamePanel(getWidth(), getHeight());
+//        add(gameScreen);
+        gp = gameScreen;
+        gameScreen = new GamePanel(getWidth(),getHeight());
         add(gameScreen);
     }
 
@@ -304,16 +307,30 @@ public class GameWindow extends JPanel {
         }
     }
 
-    public static void main(String args[]) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("ChessGame by Paul Saikko");
-            frame.setContentPane(new GameWindow());
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
-            frame.setLocationByPlatform(true);
-            frame.setVisible(true);
-        });
+//    public static void main(String args[]) {
+//        SwingUtilities.invokeLater(() -> {
+//            JFrame frame = new JFrame("ChessGame by Paul Saikko");
+//            frame.setContentPane(new GameWindow());
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            frame.pack();
+//            frame.setLocationByPlatform(true);
+//            frame.setVisible(true);
+//        });
+//    }
+
+    public void Setup(){
+        JFrame frame = new JFrame("ChessGame");
+        frame.setSize(1000,800);
+        frame.setContentPane(new GameWindow(gameScreen));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
     }
+
+//    public void setMode(){
+//    }
+
     private javax.swing.JMenuBar jMenuBar_Main;
     private javax.swing.JMenuItem jMenuItem_Close;
     private javax.swing.JMenuItem jMenuItem_Load;
