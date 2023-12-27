@@ -24,7 +24,7 @@ import java.util.List;
  * @author Paul
  */
 public class GamePanel extends JComponent implements MouseListener, IComponent {
-    public String title = "N";
+    public String title = "";
 
     public void Colo(Graphics g, int sW, int sH) {
 

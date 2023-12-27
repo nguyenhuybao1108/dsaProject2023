@@ -9,7 +9,7 @@ public class ChristmasDecorator extends Decorator {
         super(component);
     }
 
-    final Color lightColor = new Color(0, 255, 0, 255);
+    final Color lightColor = new Color(0, 255, 0, 60);
     final Color darkColor = new Color(255, 0, 0, 255);
 
     private void addChristmasTheme(Graphics g, int sW, int sH) {
