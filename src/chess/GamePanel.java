@@ -26,7 +26,7 @@ import java.util.List;
 public class GamePanel extends JComponent implements MouseListener, IComponent {
     public String title = "";
 
-    public void Colo(Graphics g, int sW, int sH) {
+    public void changeTheme(Graphics g, int sW, int sH) {
 
         switch (title) {
             case "C":
@@ -477,7 +477,7 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
 
         // draw the board to the buffer
 
-        Colo(g, sW, sH);
+        changeTheme(g, sW, sH);
 
         drawHelperCircles(g, sW, sH);
 

@@ -197,13 +197,13 @@ public class GameWindow extends javax.swing.JFrame {
     }// GEN-LAST:event_jMenuItem_UndoActionPerformed
 
     private void jMenuItem_ChristmasActionPerform(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem_UndoActionPerformed
-        gameScreen.title = "C";
+        gameScreen.theme = "C";
         gameScreen.paintComponents(getGraphics());
         gameScreen.repaint();
     }
 
     private void jMenuItem_NewYearActionPerform(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jMenuItem_UndoActionPerformed
-        gameScreen.title = "N";
+        gameScreen.theme = "N";
         gameScreen.paintComponents(getGraphics());
         gameScreen.repaint();
     }
