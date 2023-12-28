@@ -5,6 +5,8 @@
 
 import chessgame.GameWindow;
 import chessgame.Main_screen_chess;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -104,17 +106,11 @@ public class chess extends javax.swing.JFrame {
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {
        this.dispose();
        System.out.println(this.getWidth() + " + " +  this.getHeight());
-    //   GameWindow gw = new GameWindow();
         Main_screen_chess msc = new Main_screen_chess();
-//       JFrame frame = new JFrame();
-//     //  frame.setSize(1200, 800);         // use this to change the size of the game screen
-//        frame.setSize(this.getWidth(), this.getHeight());
-//       frame.add(msc);
-//       frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//       frame.setLocationRelativeTo(null);
-//       frame.setVisible(true);
-          msc.setup();
-
+//        JFrame frame = new JFrame();
+//        frame.add(msc);
+//        frame.setSize(1076,666);
+//        frame.setVisible(true);
     }
 
     /**
@@ -125,24 +121,12 @@ public class chess extends javax.swing.JFrame {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(chess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(chess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(chess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(chess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+         */  try {
+            UIManager.setLookAndFeel(new FlatMacDarkLaf());
+        } catch (UnsupportedLookAndFeelException e) {
+            throw new RuntimeException(e);
         }
-        //</editor-fold>
+
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
