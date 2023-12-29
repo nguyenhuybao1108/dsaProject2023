@@ -1,5 +1,6 @@
-
 package chess;
+
+import chessgame.Player_screen;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -24,12 +25,15 @@ import java.util.List;
  * @author Paul
  */
 public class GamePanel extends JComponent implements MouseListener,IComponent {
-        public enum ColorBoard{C , N , D};
-       public ColorBoard colorBoard;
+    public enum ColorBoard {C, N, D}
+
+    ;
+    public ColorBoard colorBoard;
 
 
+    private enum GameStatus {Idle, Error, Started, Checkmate, Stalemate}
 
-    private enum GameStatus {Idle, Error, Started, Checkmate, Stalemate};
+    ;
 
     GameStatus status = GameStatus.Idle;
     boolean imagesLoaded = false;
@@ -43,17 +47,25 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     // a list of the possible moves for the selected piece
     List<Move> okMoves;
 
+    public static boolean AIMode = true;
+
+    public enum GameMode {Human, AI}
+
+    ;
+    public GameMode gameMode;
+
     // defines color variables for different elements of the game
     final Color invalidColor = new Color(255, 0, 0, 127);
-    final Color selectionColor = new Color(255,255,0,127);
-    final Color validMoveColor = new Color(0,255,0,127);
-    final Color checkColor = new Color(127,0,255,127);
-    final Color lastMovedColor = new Color(0,255,255,75);
-    final Color lightColor = new Color(255,255,255,255);
-    final Color darkColor = new Color(0,0,0,255);
+    final Color selectionColor = new Color(255, 255, 0, 127);
+    final Color validMoveColor = new Color(0, 255, 0, 127);
+    final Color checkColor = new Color(127, 0, 255, 127);
+    final Color lastMovedColor = new Color(0, 255, 255, 75);
+    final Color lightColor = new Color(255, 255, 255, 255);
+    final Color darkColor = new Color(0, 0, 0, 255);
 
     /**
      * Creates a new BoardPanel component
+     *
      * @param w width in pixels
      * @param h height in pixels
      */
@@ -72,6 +84,10 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
      * Sets up a new 2-Player game in the panel
      */
     public void newGame() {
+        setGameMode(GameMode.Human);
+        if (this.colorBoard == null) {
+            colorBoard = ColorBoard.D;
+        }
         // creates a new board
         gameBoard = new Board(true);
         status = GameStatus.Started;
@@ -87,40 +103,45 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     /**
      * Sets up a new 1-Player game in the panel
      */
-    public void newAiGame() {
-        int aiDepth;
-        Piece.Color aiColor;
+    int aiDepth;
 
+    public void newAiGame() {
+        Piece.Color aiColor;
+        this.gameMode = GameMode.AI;
+        setGameMode(GameMode.AI);
+        if (this.colorBoard == null) {
+            colorBoard = ColorBoard.D;
+        }
         // creates a JOptionPane to ask the user for the difficulty of the ai
         Object level = JOptionPane.showInputDialog(this, "Select AI level:",
                 "New 1-Player game",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                new Object[] {"Easy", "Normal"},
+                new Object[]{"Easy", "Normal", "Hard"},
                 "Easy");
 
         // interprets JOptionPane result
         if (level == null)
             return;
-        else
-        if (level.toString().equals("Easy"))
+        else if (level.toString().equals("Easy"))
             aiDepth = 2;
-        else
+        else if (level.toString().equals("Normal"))
             aiDepth = 3;
+        else aiDepth = 4;
+
 
         // creates a JOptionPane to ask the user for the ai color
         Object color = JOptionPane.showInputDialog(this, "Select AI Color:",
                 "New 1-Player game",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                new Object[] { "Black", "White" },
+                new Object[]{"Black", "White"},
                 "Black");
 
         // interprets JOptionPane result
         if (color == null)
             return;
-        else
-        if (color.toString().equals("White"))
+        else if (color.toString().equals("White"))
             aiColor = Piece.Color.White;
         else
             aiColor = Piece.Color.Black;
@@ -176,11 +197,11 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
                 return;
 
             // get an ObjectInputStream from the file
-            FileInputStream fis = new FileInputStream((File)response);
+            FileInputStream fis = new FileInputStream((File) response);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
             // read the board from the file
-            this.gameBoard = (Board)ois.readObject();
+            this.gameBoard = (Board) ois.readObject();
 
             // close the streams
             ois.close();
@@ -228,7 +249,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
                 directory.mkdir();
 
             // get an ObjectOutputStream for a new save file
-            FileOutputStream fos = new FileOutputStream(new File("SAVES/"+name+".CSV"));
+            FileOutputStream fos = new FileOutputStream(new File("SAVES/" + name + ".CSV"));
             ObjectOutputStream oos = new ObjectOutputStream(fos);
 
             // write the board to the file
@@ -250,11 +271,11 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     }
 
 
-        public void Colo(Graphics g, int sW, int sH) {
+    public void Colo(Graphics g, int sW, int sH) {
         switch (colorBoard) {
             case C:
                 ChristmasDecorator christmasDecorator = new ChristmasDecorator(this);
-                christmasDecorator.drawBoard(g,sW, sH);
+                christmasDecorator.drawBoard(g, sW, sH);
                 break;
             case N:
                 NewyearDecorator n = new NewyearDecorator(this);
@@ -270,42 +291,21 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     /**
      * Returns the board to it's previous state
      */
-    public void undo() {
-        // resets variables for helper circles
-        selectedPiece = null;
-        invalidPiece = null;
-        okMoves = null;
 
-        // if a two player game
-        if (gameBoard.getAi() == null)
-            // skip back one move
-            gameBoard = gameBoard.getPreviousState();
-        else
-            // skip back to the last move by the player
-            if (gameBoard.getTurn() != gameBoard.getAi().getColor())
-                gameBoard = gameBoard.getPreviousState().getPreviousState();
-            else
-                gameBoard = gameBoard.getPreviousState();
-
-        // set the game status to started
-        status = GameStatus.Started;
-
-        this.repaint();
-    }
 
     /**
      * Loads the piece images from a default folder.
      * ImageIO syntax from:
      * http://java.sun.com/docs/books/tutorial/2d/images/loadimage.html
      */
-    private void loadImages(){
+    private void loadImages() {
         try {
             // initialize two arrays of bufferedImages
             BufferedImage[] whiteImages = new BufferedImage[6];
             BufferedImage[] blackImages = new BufferedImage[6];
 
             // if the PIECES folder doesn't exist, create it
-            File directory = new File ("PIECES");
+            File directory = new File("PIECES");
             if (!directory.exists()) {
                 if (directory.mkdir()) {
                     // the directory will be empty, so throw an exception
@@ -369,6 +369,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
     /**
      * Responds to a mousePressed event
+     *
      * @param e
      */
     public void mousePressed(MouseEvent e) {
@@ -386,14 +387,14 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
                         e.getPoint().y / (h / 8));
 
                 // if no piece has been selected yet
-                if(selectedPiece == null) {
+                if (selectedPiece == null) {
                     // select the piece that was clicked
                     selectedPiece = gameBoard.getPieceAt(boardPt);
                     if (selectedPiece != null) {
                         // get the available moves for the piece
                         okMoves = selectedPiece.getValidMoves(gameBoard, true);
                         // if the piece is of the wrong color, mark as invalid
-                        if(selectedPiece.getColor() != gameBoard.getTurn()) {
+                        if (selectedPiece.getColor() != gameBoard.getTurn()) {
                             okMoves = null;
                             invalidPiece = selectedPiece;
                             selectedPiece = null;
@@ -463,6 +464,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
      * Overrides the default paintComponent method.
      * Idea from:
      * http://en.allexperts.com/q/Java-1046/repaint.htm
+     *
      * @param gr the Graphics object to paint to
      */
     @Override
@@ -474,6 +476,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
         int sW = w / 8;
         int sH = h / 8;
 
+
         // create an off-screen buffer
         Image buffer = createImage(w, h);
 
@@ -481,9 +484,8 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
         Graphics g = buffer.getGraphics();
 
         // draw the board to the buffer
-   //     drawBoard(g, sW, sH);
-
-        Colo(g,sW,sH);
+        //     drawBoard(g, sW, sH);
+        Colo(g, sW, sH);
 
         drawHelperCircles(g, sW, sH);
 
@@ -497,13 +499,14 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
     /**
      * Draws helper circles to graphics object
-     * @param g graphics object to draw to
+     *
+     * @param g  graphics object to draw to
      * @param sW width of square
      * @param sH height of square
      */
     private void drawHelperCircles(Graphics g, int sW, int sH) {
         // if a piece is selected
-        if(selectedPiece != null) {
+        if (selectedPiece != null) {
             // draw circle for that piece
             Point p = selectedPiece.getLocation();
             g.setColor(selectionColor);
@@ -511,13 +514,13 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
             // and all of it's valid moves
             g.setColor(validMoveColor);
-            for(Move m : okMoves) {
+            for (Move m : okMoves) {
                 Point pt = m.getMoveTo();
                 g.fillOval(pt.x * sW, pt.y * sH, sW, sH);
             }
         }
         // if the user clicked on a piece of the wrong color
-        if(invalidPiece != null) {
+        if (invalidPiece != null) {
             // draw circle for that piece
             Point p = invalidPiece.getLocation();
             g.setColor(invalidColor);
@@ -541,15 +544,16 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
     /**
      * Draws pieces to the graphics object
-     * @param g Graphics object to draw to
+     *
+     * @param g  Graphics object to draw to
      * @param sH height of a square
      * @param sW width of a square
      */
     private void drawPieces(Graphics g, int sW, int sH) {
         // for each piece on the board
-        for(Piece pc : gameBoard.getPieces()) {
+        for (Piece pc : gameBoard.getPieces()) {
             // if piece is white
-            if(pc.getColor() == Piece.Color.White) {
+            if (pc.getColor() == Piece.Color.White) {
                 // draw its white image
                 g.drawImage(pc.getWhiteImage(), pc.getLocation().x * sW,
                         pc.getLocation().y * sH, sW, sH, null);
@@ -563,7 +567,8 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
     /**
      * Draws an empty board
-     * @param g Graphics2D object to draw to
+     *
+     * @param g  Graphics2D object to draw to
      * @param sW width of a square
      * @param sH height of a square
      */
@@ -575,9 +580,9 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
         boolean dark = false;
         g.setColor(darkColor);
         // draw black squares
-        for(int y = 0; y < 8; y++) {
-            for(int x = 0; x < 8; x++) {
-                if(dark) {
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                if (dark) {
                     g.fillRect(x * sW, y * sH, sW, sH);
                 }
                 dark = !dark;
@@ -588,34 +593,83 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
     /**
      * Gets the move with a given point as it's destination from the list of moves
+     *
      * @param pt point to look for
      * @return move with destination at pt
      */
     private Move moveWithDestination(Point pt) {
-        for(Move m : okMoves)
-            if(m.getMoveTo().equals(pt))
+        for (Move m : okMoves)
+            if (m.getMoveTo().equals(pt))
                 return m;
         return null;
     }
-    /**
-     * Required to implement MouseListener. Not used
-     * @param e
-     */
-    public void mouseExited(MouseEvent e) { }
-    /**
-     * Required to implement MouseListener. Not used
-     * @param e
-     */
-    public void mouseEntered(MouseEvent e) { }
-    /**
-     * Required to implement MouseListener. Not used
-     * @param e
-     */
-    public void mouseReleased(MouseEvent e) { }
 
-    public void setColorBoard(ColorBoard color){
+    /**
+     * Required to implement MouseListener. Not used
+     *
+     * @param e
+     */
+    public void mouseExited(MouseEvent e) {
+    }
+
+    /**
+     * Required to implement MouseListener. Not used
+     *
+     * @param e
+     */
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    /**
+     * Required to implement MouseListener. Not used
+     *
+     * @param e
+     */
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void setColorBoard(ColorBoard color) {
         this.colorBoard = color;
     }
 
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
+    }
 
+    public GameMode getGameMode() {
+        return this.gameMode;
+    }
+
+    public Board getBoard() {
+        return this.gameBoard;
+    }
+
+    public void setGameBoard(Board board) {
+        this.gameBoard = board;
+    }
+
+    public void Undo(int num) {
+
+        if (gameBoard.getAi() == null) {
+            getBoard().getPreviousMove();
+            repaint();
+        } else if (aiDepth == 3) {
+            if (num <= 3) {
+                System.out.println(num);
+                if (gameBoard.getTurn() != gameBoard.getAi().getColor()) {
+                    getBoard().getPreviousMove();
+                    getBoard().getPreviousMove();
+                } else getBoard().getPreviousMove();
+            }
+            else System.out.println("Cannot undo");
+        }
+        else if (aiDepth == 4) {
+            System.out.println("Cannot undo");
+        } else {
+            if (gameBoard.getTurn() != gameBoard.getAi().getColor()) {
+                getBoard().getPreviousMove();
+                getBoard().getPreviousMove();
+            } else getBoard().getPreviousMove();
+        }
+    }
 }
