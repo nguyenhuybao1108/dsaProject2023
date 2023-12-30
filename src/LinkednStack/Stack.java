@@ -1,4 +1,6 @@
-package chess;
+package LinkednStack;
+
+import chess.Move;
 
 public class Stack {
     private Move[] move;

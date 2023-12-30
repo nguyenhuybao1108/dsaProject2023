@@ -1,27 +1,26 @@
-package chess;
+package LinkednStack;
 
-public class TurnList {
+import chess.Piece;
+
+public class InCheckList {
     private Node head;
     private Node tail;
 
     private class Node {
-       Piece.Color turn;
+        Piece inCheck;
         Node next;
         Node prev;
 
-        public Node(Piece.Color turn) {
-            this.turn = turn;
+        public Node(Piece inCheck) {
+            this.inCheck = inCheck;
             next = null;
             prev = null;
         }
 
-        public Piece.Color getTurn(){
-            return turn;
-        }
     }
 
-    public void InsertFirst(Piece.Color turn) {
-        Node newnode = new Node(turn);
+    public void InsertFirst(Piece inCheck) {
+        Node newnode = new Node(inCheck);
         if (head == null) {
             head = newnode;
             tail = newnode;
@@ -42,8 +41,8 @@ public class TurnList {
         }
     }
 
-    public Piece.Color getTurn() {
-        return head.turn;
+    public Piece getInCheck() {
+        return head.inCheck;
     }
 
 

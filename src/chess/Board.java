@@ -1,5 +1,10 @@
 package chess;
 
+import LinkednStack.InCheckList;
+import LinkednStack.PieceList;
+import LinkednStack.TurnList;
+import UI.GameWindow;
+
 import java.io.Serializable;
 import java.awt.Point;
 import java.util.List;
@@ -18,6 +23,8 @@ public class Board implements Serializable, Cloneable {
     private Piece Initial = null;
     private Piece lastMoved = null;
     private Ai ai = null;
+
+    private GameWindow gw;
     private Stack<Move> moveHistory = new Stack<>();
     Point moveFrom;
   TurnList turnList = new TurnList();
@@ -386,14 +393,20 @@ public class Board implements Serializable, Cloneable {
 
         // all moves to the arrays for all pieces
         for(Piece p : pieces) {
-            if(p.getColor() == Piece.Color.White)
+            if(p.getColor() == Piece.Color.White) {
+            //    gw.checkmateOccurred(0);
                 whiteMoves.addAll(p.getValidMoves(this, true));
-            else
+            }
+            else {
+
+              //  gw.checkmateOccurred(1);
                 blackMoves.addAll(p.getValidMoves(this, true));
+            }
         }
 
         // if either side can make no valid moves, the game is over
         return (whiteMoves.size() == 0 || blackMoves.size() == 0);
+
     }
 
     /**
@@ -426,7 +439,7 @@ public class Board implements Serializable, Cloneable {
     }
 
 
-    public void Undo(GamePanel gp){
+    public void getPrevious(GamePanel gp){
         if(pieceList.isEmpty()){
             return;
         }

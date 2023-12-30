@@ -1,4 +1,6 @@
-package chess;
+package LinkednStack;
+
+import chess.Piece;
 
 public class PieceList {
     private Node head;

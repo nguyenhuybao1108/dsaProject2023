@@ -1,6 +1,11 @@
 
 package chess;
 
+import Decor.ChristmasDecorator;
+import Decor.IComponent;
+import Decor.NewyearDecorator;
+import Decor.WoodDecorator;
+
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import java.awt.Color;
@@ -23,11 +28,9 @@ import java.util.List;
  * Implements MouseListener.
  * @author Paul
  */
-public class GamePanel extends JComponent implements MouseListener,IComponent {
-        public enum ColorBoard{C , N , D};
-       public ColorBoard colorBoard;
-
-
+public class GamePanel extends JComponent implements MouseListener, IComponent {
+    public enum ColorBoard{C ,N, W, D};
+    public ColorBoard colorBoard;
 
     private enum GameStatus {Idle, Error, Started, Checkmate, Stalemate};
 
@@ -65,7 +68,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
         // set the size of the component
         this.setSize(w, h);
         // loads piece images from file
-        loadImages();
+       // loadImages();
         // inititalizes the game board for a 2-player game
         newGame();
         // adds a listener for mouse events
@@ -92,11 +95,17 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
         this.repaint();
     }
 
+    public int getAiDepth() {
+        return aiDepth;
+    }
+
     /**
      * Sets up a new 1-Player game in the panel
      */
+
+    int aiDepth;
+
     public void newAiGame() {
-        int aiDepth;
         Piece.Color aiColor;
         this.gameMode = GameMode.AI;
         setGameMode(GameMode.AI);
@@ -108,17 +117,25 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
                 "New 1-Player game",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
-                new Object[] {"Easy", "Normal"},
+                new Object[] {"Easy", "Normal", "Hard"},
                 "Easy");
 
         // interprets JOptionPane result
         if (level == null)
             return;
         else
-        if (level.toString().equals("Easy"))
+        if (level.toString().equals("Easy")) {
             aiDepth = 2;
-        else
+            getAiDepth();
+        }
+        else if (level.toString().equals("Normal")) {
             aiDepth = 3;
+            getAiDepth();
+        }
+        else {
+            aiDepth = 4;
+            getAiDepth();
+        }
 
         // creates a JOptionPane to ask the user for the ai color
         Object color = JOptionPane.showInputDialog(this, "Select AI Color:",
@@ -272,8 +289,13 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
                 NewyearDecorator n = new NewyearDecorator(this);
                 n.drawBoard(g, sW, sH);
                 break;
+            case W:
+                WoodDecorator w = new WoodDecorator(this);
+                w.drawBoard(g, sW, sH);
+                break;
             default:
                 drawBoard(g, sW, sH);
+                loadImage();
                 break;
         }
 
@@ -289,7 +311,9 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
      * ImageIO syntax from:
      * http://java.sun.com/docs/books/tutorial/2d/images/loadimage.html
      */
-    private void loadImages(){
+
+
+    public void loadImage(){
         try {
             // initialize two arrays of bufferedImages
             BufferedImage[] whiteImages = new BufferedImage[6];
@@ -577,6 +601,8 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
         }
     }
 
+
+
     /**
      * Gets the move with a given point as it's destination from the list of moves
      * @param pt point to look for
@@ -625,6 +651,28 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     }
 
 
+    public void Undo(int num) {
 
-
+        if (gameBoard.getAi() == null) {
+            gameBoard.getPrevious(this);
+            repaint();
+        } else if (aiDepth == 3) {
+            if (num <= 3) {
+                System.out.println(num);
+                if (gameBoard.getTurn() != gameBoard.getAi().getColor()) {
+                    gameBoard.getPrevious(this);
+                    gameBoard.getPrevious(this);
+                } else gameBoard.getPrevious(this);
+            }
+            else System.out.println("Cannot undo");
+        }
+        else if (aiDepth == 4) {
+            System.out.println("Cannot undo");
+        } else {
+            if (gameBoard.getTurn() != gameBoard.getAi().getColor()) {
+                gameBoard.getPrevious(this);
+                gameBoard.getPrevious(this);
+            } else gameBoard.getPrevious(this);
+        }
+    }
 }
