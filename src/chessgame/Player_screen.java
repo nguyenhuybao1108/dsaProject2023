@@ -1,9 +1,13 @@
 package chessgame;//package chessgame;
 
 
+import chess.Board;
 import chess.GamePanel;
+
+import chess.Undo;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
+import org.w3c.dom.Node;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +19,8 @@ import java.awt.*;
 public class Player_screen extends javax.swing.JFrame {
 GamePanel GP;
 private int count = 0;
+private Board board;
+
     /**
      * Creates new form frame1
      */
@@ -31,6 +37,7 @@ private int count = 0;
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
+        board = GP.getBoard();
     }
 
     /**
@@ -60,14 +67,14 @@ private int count = 0;
             }
         });
 
-        jButton2.setText("Undo");
+        jButton2.setText("Redo");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Redo");
+        jButton3.setText("Undo");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -144,6 +151,7 @@ private int count = 0;
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,14 +176,24 @@ private int count = 0;
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+//        Linkedlist.Undo undo = new Linkedlist.Undo(board);
+//       undo.Execute(GP);
+        Undo undo = new Undo(board);
+        undo.Execute(GP);
     }
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-
+        GamePanel.GameMode gameMode = GP.getGameMode();
+         System.out.println(gameMode);
         // TODO add your handling code here:
         GP = new GamePanel(this.getWidth() , this.getHeight());
         GP.setColorBoard(GamePanel.ColorBoard.D);
-        GP.newAiGame();
+        GP.setGameMode(gameMode);
+        if(GP.getGameMode() == GamePanel.GameMode.AI){
+            GP.newAiGame();
+        }
+        else{
+            GP.newGame();        }
         this.dispose();
         Player_screen p = new Player_screen(GP);
         p.setLocationRelativeTo(null);
@@ -188,18 +206,6 @@ private int count = 0;
         this.dispose();
         Main_screen_chess msc = new Main_screen_chess();
     }
-
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new Player_screen().setVisible(true);
-//            }
-//        });
-//    }
 
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;

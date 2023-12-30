@@ -1,6 +1,7 @@
 package chess;
 
 import java.awt.Point;
+import java.util.LinkedList;
 
 /**
  * Provides a convenient way of handling moves on the board
@@ -10,6 +11,8 @@ public class Move {
     private Piece toMove;
     private Point moveTo;
     private Piece toCapture;
+    private Piece InitialLocation;
+    private Linkedlist linkedlist;
     
     /**
      * Creates a new move object
@@ -22,6 +25,7 @@ public class Move {
         this.moveTo = moveTo;
         this.toCapture = toCapture;
     }
+
     
     /**
      * Returns the destination of the move

@@ -43,6 +43,10 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     // a list of the possible moves for the selected piece
     List<Move> okMoves;
 
+    public static boolean AIMode = true;
+    public enum GameMode{Human , AI};
+    public  GameMode gameMode;
+
     // defines color variables for different elements of the game
     final Color invalidColor = new Color(255, 0, 0, 127);
     final Color selectionColor = new Color(255,255,0,127);
@@ -72,6 +76,10 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
      * Sets up a new 2-Player game in the panel
      */
     public void newGame() {
+       setGameMode(GameMode.Human);
+        if(this.colorBoard == null){
+            colorBoard = ColorBoard.D;
+        }
         // creates a new board
         gameBoard = new Board(true);
         status = GameStatus.Started;
@@ -90,7 +98,11 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     public void newAiGame() {
         int aiDepth;
         Piece.Color aiColor;
-
+        this.gameMode = GameMode.AI;
+        setGameMode(GameMode.AI);
+        if(this.colorBoard == null){
+            colorBoard = ColorBoard.D;
+        }
         // creates a JOptionPane to ask the user for the difficulty of the ai
         Object level = JOptionPane.showInputDialog(this, "Select AI level:",
                 "New 1-Player game",
@@ -270,28 +282,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     /**
      * Returns the board to it's previous state
      */
-    public void undo() {
-        // resets variables for helper circles
-        selectedPiece = null;
-        invalidPiece = null;
-        okMoves = null;
 
-        // if a two player game
-        if (gameBoard.getAi() == null)
-            // skip back one move
-            gameBoard = gameBoard.getPreviousState();
-        else
-            // skip back to the last move by the player
-            if (gameBoard.getTurn() != gameBoard.getAi().getColor())
-                gameBoard = gameBoard.getPreviousState().getPreviousState();
-            else
-                gameBoard = gameBoard.getPreviousState();
-
-        // set the game status to started
-        status = GameStatus.Started;
-
-        this.repaint();
-    }
 
     /**
      * Loads the piece images from a default folder.
@@ -474,6 +465,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
         int sW = w / 8;
         int sH = h / 8;
 
+
         // create an off-screen buffer
         Image buffer = createImage(w, h);
 
@@ -482,7 +474,6 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
         // draw the board to the buffer
    //     drawBoard(g, sW, sH);
-
         Colo(g,sW,sH);
 
         drawHelperCircles(g, sW, sH);
@@ -616,6 +607,24 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
     public void setColorBoard(ColorBoard color){
         this.colorBoard = color;
     }
+
+  public void setGameMode(GameMode gameMode){
+        this.gameMode = gameMode;
+  }
+
+  public GameMode getGameMode(){
+        return this.gameMode;
+  }
+
+  public Board getBoard(){
+        return this.gameBoard;
+    }
+
+    public void setGameBoard(Board board){
+        this.gameBoard = board;
+    }
+
+
 
 
 }

@@ -300,6 +300,7 @@ public class Main_screen_chess extends javax.swing.JFrame {
         GP = new GamePanel(this.getWidth(), this.getHeight());
         GP.setColorBoard(color);
         GP.newAiGame();
+        GP.setGameMode(GamePanel.GameMode.AI);
         this.dispose();
         Player_screen p = new Player_screen( GP);
 
@@ -307,12 +308,17 @@ public class Main_screen_chess extends javax.swing.JFrame {
 
     private void button2ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        GP = new GamePanel(this.getWidth(), this.getHeight());
+        GP.newGame();
+        GP.setGameMode(GamePanel.GameMode.Human);
+        this.dispose();
+        Player_screen p = new Player_screen(GP);
     }
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
 
-        Object level = JOptionPane.showInputDialog(this, "Theme choosing",
+        Object BoardTheme = JOptionPane.showInputDialog(this, "Theme choosing",
                 "THEME",
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -320,14 +326,13 @@ public class Main_screen_chess extends javax.swing.JFrame {
                 "Default");
 
         // interprets JOptionPane result
-
-        if (level.toString().equals("Christmas")){
+        if (BoardTheme.toString().equals("Christmas")){
             color  = GamePanel.ColorBoard.C;
         }
-        if(level.toString().equals("New Year")){
+        if(BoardTheme.toString().equals("New Year")){
             color = GamePanel.ColorBoard.N;
         }
-        if(level.toString().equals("Default") || level == null){
+        if(BoardTheme.toString().equals("Default") ){
             color = GamePanel.ColorBoard.D;
         }
     }
