@@ -9,6 +9,8 @@ import java.io.File;
 
 import chess.Board;
 import chess.GamePanel;
+import chess.Clock;
+import chess.Piece;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,27 +22,31 @@ public class GameWindow {
     int undoMove;
 
 
-//    public Clock blackClock;
-//    public Clock whiteClock;
+    public Clock blackClock;
+    public Clock whiteClock;
 
     private Timer timer;
 
     private GamePanel GP;
 
-    public GameWindow(String blackName, String whiteName, GamePanel GP) {
+
+
+    public GameWindow(String blackName, String whiteName, GamePanel GP, int hh,
+                      int mm, int ss) {
+
          this.GP = GP;
 
 
-//        blackClock = new Clock(hh, ss, mm);
-//        whiteClock = new Clock(hh, ss, mm);
+        blackClock = new Clock(hh, ss, mm);
+        whiteClock = new Clock(hh, ss, mm);
 
-        gameWindow = new JFrame("Chess");
+        gameWindow = new JFrame("Chess Game - DSA project");
 
         try {
-            Image whiteImg = ImageIO.read(new File("resources/wp.png"));
+            Image whiteImg = ImageIO.read(new File("PIECES/lion.png"));
             gameWindow.setIconImage(whiteImg);
         } catch (Exception e) {
-            System.out.println("Game file wp.png not found");
+            System.out.println("Game file lion.png not found");
         }
 
         gameWindow.setLocation(300, 100);
@@ -48,9 +54,8 @@ public class GameWindow {
         gameWindow.setLayout(new BorderLayout(30, 20));
 
         // Game Data window
-        JPanel gameData = gameDataPanel(blackName, whiteName);
+        JPanel gameData = gameDataPanel(blackName, whiteName, hh, mm, ss);
         gameData.setSize(gameData.getPreferredSize());
-
         gameWindow.add(gameData, BorderLayout.NORTH);
 
         gameWindow.add(GP, BorderLayout.CENTER);
@@ -69,10 +74,11 @@ public class GameWindow {
 
 // Helper function to create data panel
 
-    private JPanel gameDataPanel(final String bn, final String wn) {
+    private JPanel gameDataPanel(final String bn, final String wn,
+                                 final int hh, final int mm, final int ss) {
 
         JPanel gameData = new JPanel();
-        gameData.setLayout(new GridLayout(4, 2, 0, 0));
+        gameData.setLayout(new GridLayout(3, 2, 0, 0));
 
 
         // PLAYER NAMES
@@ -91,74 +97,74 @@ public class GameWindow {
         gameData.add(w);
         gameData.add(b);
 
-        // CLOCKS
+        final JLabel bTime = new JLabel(blackClock.getTime());
+        final JLabel wTime = new JLabel(whiteClock.getTime());
 
-//        final JLabel bTime = new JLabel(blackClock.getTime());
-//        final JLabel wTime = new JLabel(whiteClock.getTime());
+        bTime.setHorizontalAlignment(JLabel.CENTER);
+        bTime.setVerticalAlignment(JLabel.CENTER);
+        wTime.setHorizontalAlignment(JLabel.CENTER);
+        wTime.setVerticalAlignment(JLabel.CENTER);
 
-//        bTime.setHorizontalAlignment(JLabel.CENTER);
-//        bTime.setVerticalAlignment(JLabel.CENTER);
-//        wTime.setHorizontalAlignment(JLabel.CENTER);
-//        wTime.setVerticalAlignment(JLabel.CENTER);
+        if (!(hh == 0 && mm == 0 && ss == 0)) {
+            timer = new Timer(1000, null);
+            timer.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
 
-//        if (!(hh == 0 && mm == 0 && ss == 0)) {
-//            timer = new Timer(1000, null);
-//            timer.addActionListener(new ActionListener() {
-//                public void actionPerformed(ActionEvent e) {
-//                    boolean turn = board.getTurn();
-//
-//                    if (turn) {
-//                        whiteClock.decr();
-//                        wTime.setText(whiteClock.getTime());
-//
-//                        if (whiteClock.outOfTime()) {
-//                            timer.stop();
-//                            int n = JOptionPane.showConfirmDialog(
-//                                    gameWindow,
-//                                    bn + " wins by time! Play a new game? \n" +
-//                                            "Choosing \"No\" quits the game.",
-//                                    bn + " wins!",
-//                                    JOptionPane.YES_NO_OPTION);
-//
-//                            if (n == JOptionPane.YES_OPTION) {
-//                                new GameWindow(bn, wn, hh, mm, ss);
-//                                gameWindow.dispose();
-//                            } else gameWindow.dispose();
-//                        }
-//                    } else {
-//                        blackClock.decr();
-//                        bTime.setText(blackClock.getTime());
-//
-//                        if (blackClock.outOfTime()) {
-//                            timer.stop();
-//                            int n = JOptionPane.showConfirmDialog(
-//                                    gameWindow,
-//                                    wn + " wins by time! Play a new game? \n" +
-//                                            "Choosing \"No\" quits the game.",
-//                                    wn + " wins!",
-//                                    JOptionPane.YES_NO_OPTION);
-//
-//                            if (n == JOptionPane.YES_OPTION) {
-//                                new GameWindow(bn, wn, hh, mm, ss);
-//                                gameWindow.dispose();
-//                            } else gameWindow.dispose();
-//                        }
-//                    }
-//                }
-//            });
-//            timer.start();
-//        } else {
-//            wTime.setText("Untimed game");
-//            bTime.setText("Untimed game");
-//        }
-//
-//        gameData.add(wTime);
-//        gameData.add(bTime);
-//
-//        gameData.setPreferredSize(gameData.getMinimumSize());
-//
+                    Board board = GP.getBoard();
+                    Piece.Color turn = board.getTurn();
+
+                    if (turn == Piece.Color.White) {
+                        whiteClock.decr();
+                        wTime.setText(whiteClock.getTime());
+
+                        if (whiteClock.outOfTime()) {
+                            timer.stop();
+                            int n = JOptionPane.showConfirmDialog(
+                                    gameWindow,
+                                    bn + " wins by time! Play a new game? \n" +
+                                            "Choosing \"No\" quits the game.",
+                                    bn + " wins!",
+                                    JOptionPane.YES_NO_OPTION);
+
+                            if (n == JOptionPane.YES_OPTION) {
+                                new GameWindow(bn, wn, GP, hh, mm, ss);
+                                gameWindow.dispose();
+                            } else gameWindow.dispose();
+                        }
+                    } else {
+                        blackClock.decr();
+                        bTime.setText(blackClock.getTime());
+
+                        if (blackClock.outOfTime()) {
+                            timer.stop();
+                            int n = JOptionPane.showConfirmDialog(
+                                    gameWindow,
+                                    wn + " wins by time! Play a new game? \n" +
+                                            "Choosing \"No\" quits the game.",
+                                    wn + " wins!",
+                                    JOptionPane.YES_NO_OPTION);
+
+                            if (n == JOptionPane.YES_OPTION) {
+                                new GameWindow(bn, wn, GP, hh, mm, ss);
+                                gameWindow.dispose();
+                            } else gameWindow.dispose();
+                        }
+                    }
+                }
+            });
+            timer.start();
+        } else {
+            wTime.setText("Untimed game");
+            bTime.setText("Untimed game");
+        }
+
+        gameData.add(wTime);
+        gameData.add(bTime);
+
+        gameData.setPreferredSize(gameData.getMinimumSize());
+
        return gameData;
-//    }
+
     }
 
     private JPanel downButtons() {

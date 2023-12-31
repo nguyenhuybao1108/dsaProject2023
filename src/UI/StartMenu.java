@@ -37,11 +37,11 @@ public class StartMenu implements Runnable {
         components.add(blackPanel, BorderLayout.EAST);
         final JLabel blackPiece = new JLabel();
         try {
-            Image blackImg = ImageIO.read(new File("resources/bp.png"));
+            Image blackImg = ImageIO.read(new File("PIECES/lion.png"));
             blackPiece.setIcon(new ImageIcon(blackImg));
             blackPanel.add(blackPiece);
         } catch (Exception e) {
-            System.out.println("Required game file bp.png missing");
+            System.out.println("Required game file lion.png missing");
         }
 
 
@@ -54,12 +54,12 @@ public class StartMenu implements Runnable {
         final JLabel whitePiece = new JLabel();
 
         try {
-            Image whiteImg = ImageIO.read((new File("resources/wp.png")));
+            Image whiteImg = ImageIO.read((new File("PIECES/tiger.png")));
             whitePiece.setIcon(new ImageIcon(whiteImg));
             whitePanel.add(whitePiece);
             startWindow.setIconImage(whiteImg);
         } catch (Exception e) {
-            System.out.println("Required game file wp.png missing");
+            System.out.println("Required game file tiger.png missing");
         }
 
 
@@ -67,36 +67,35 @@ public class StartMenu implements Runnable {
         whitePanel.add(whiteInput);
 
         // Timer settings
-//        final String[] minSecInts = new String[60];
-//        for (int i = 0; i < 60; i++) {
-//            if (i < 10) {
-//                minSecInts[i] = "0" + Integer.toString(i);
-//            } else {
-//                minSecInts[i] = Integer.toString(i);
-//            }
-//        }
+        final String[] minSecInts = new String[60];
+        for (int i = 0; i < 60; i++) {
+            if (i < 10) {
+                minSecInts[i] = "0" + Integer.toString(i);
+            } else {
+                minSecInts[i] = Integer.toString(i);
+            }
+        }
 
-//        final JComboBox<String> seconds = new JComboBox<String>(minSecInts);
-//        final JComboBox<String> minutes = new JComboBox<String>(minSecInts);
-//        final JComboBox<String> hours =
-//                new JComboBox<String>(new String[] {"0","1","2","3"});
-//
-//        Box timerSettings = Box.createHorizontalBox();
-//
-//        hours.setMaximumSize(hours.getPreferredSize());
-//        minutes.setMaximumSize(minutes.getPreferredSize());
-//        seconds.setMaximumSize(minutes.getPreferredSize());
-//
-//        timerSettings.add(hours);
-//        timerSettings.add(Box.createHorizontalStrut(10));
-//        timerSettings.add(seconds);
-//        timerSettings.add(Box.createHorizontalStrut(10));
-//        timerSettings.add(minutes);
-//
-//        timerSettings.add(Box.createVerticalGlue());
-//
-//        components.add(timerSettings);
+        final JComboBox<String> seconds = new JComboBox<String>(minSecInts);
+        final JComboBox<String> minutes = new JComboBox<String>(minSecInts);
+        final JComboBox<String> hours =
+                new JComboBox<String>(new String[] {"0","1","2","3"});
 
+        Box timerSettings = Box.createHorizontalBox();
+
+        hours.setMaximumSize(hours.getPreferredSize());
+        minutes.setMaximumSize(minutes.getPreferredSize());
+        seconds.setMaximumSize(minutes.getPreferredSize());
+
+        timerSettings.add(hours);
+        timerSettings.add(Box.createHorizontalStrut(10));
+        timerSettings.add(seconds);
+        timerSettings.add(Box.createHorizontalStrut(10));
+        timerSettings.add(minutes);
+
+        timerSettings.add(Box.createVerticalGlue());
+
+        components.add(timerSettings);
         // Buttons
         Box buttons = Box.createHorizontalBox();
         final JButton quit = new JButton("Quit");
@@ -163,6 +162,10 @@ public class StartMenu implements Runnable {
                     colorTheme = GamePanel.ColorBoard.D;
                 }
 
+                int hh = Integer.parseInt((String) hours.getSelectedItem());
+                int mm = Integer.parseInt((String) minutes.getSelectedItem());
+                int ss = Integer.parseInt((String) seconds.getSelectedItem());
+
                 if (mode.getSelectedItem().toString().equals("vsHuman")){
                     GP.newGame();
                 }
@@ -171,7 +174,7 @@ public class StartMenu implements Runnable {
 
                 startWindow.dispose();
                 //Player_screen p = new Player_screen(GP);
-                UI.GameWindow gw = new GameWindow(blackInput.getName(), whiteInput.getName(), GP);
+                UI.GameWindow gw = new GameWindow(blackInput.getText(), whiteInput.getText(), GP, hh, mm, ss);
 
             }});
 

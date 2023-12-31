@@ -21,8 +21,8 @@ public class NewyearDecorator extends Decorator {
         // TODO Auto-generated constructor stub
     }
 
-    final Color lightColor = new Color(0, 0, 255, 255);
-    final Color darkColor = new Color(255, 255, 0, 255);
+    final Color lightColor = new Color(255, 253, 196);
+    final Color darkColor = new Color(174, 241, 255);
 
     private void addNewYearTheme(Graphics g, int sW, int sH) {
         // draw a light background
@@ -43,51 +43,38 @@ public class NewyearDecorator extends Decorator {
         }
     }
 
-    private void loadImages(){
+    private void loadNewYearImages(){
         try {
             // initialize two arrays of bufferedImages
             BufferedImage[] whiteImages = new BufferedImage[6];
             BufferedImage[] blackImages = new BufferedImage[6];
 
             // if the PIECES folder doesn't exist, create it
-            File directory = new File ("PIECES");
+            File directory = new File ("NewYear_src");
             if (!directory.exists()) {
                 if (directory.mkdir()) {
                     // the directory will be empty, so throw an exception
                     throw new Exception("The PIECES directory did not exist. " +
-                            "It has been created. Ensure that it contains the following files: \n" +
-                            "WHITE_PAWN.PNG\n" +
-                            "WHITE_KNIGHT.PNG\n" +
-                            "WHITE_BISHOP.PNG\n" +
-                            "WHITE_ROOK.PNG\n" +
-                            "WHITE_QUEEN.PNG\n" +
-                            "WHITE_KING.PNG\n" +
-                            "BLACK_PAWN.PNG\n" +
-                            "BLACK_KNIGHT.PNG\n" +
-                            "BLACK_BISHOP.PNG\n" +
-                            "BLACK_ROOK.PNG\n" +
-                            "BLACK_QUEEN.PNG\n" +
-                            "BLACK_KING.PNG");
+                            "It has been created. Ensure that it contains the files: \n" );
                 }
             }
 
 
             // load all white images
-            whiteImages[0] = ImageIO.read(new File("PIECES/WHITE_PAWN.PNG"));
-            whiteImages[1] = ImageIO.read(new File("PIECES/WHITE_KNIGHT.PNG"));
-            whiteImages[2] = ImageIO.read(new File("PIECES/WHITE_BISHOP.PNG"));
-            whiteImages[3] = ImageIO.read(new File("PIECES/WHITE_ROOK.PNG"));
-            whiteImages[4] = ImageIO.read(new File("PIECES/WHITE_QUEEN.PNG"));
-            whiteImages[5] = ImageIO.read(new File("PIECES/WHITE_KING.PNG"));
+            whiteImages[0] = ImageIO.read(new File("NewYear_src/chess-pawn-white.png"));
+            whiteImages[1] = ImageIO.read(new File("NewYear_src/chess-knight-white.png"));
+            whiteImages[2] = ImageIO.read(new File("NewYear_src/chess-bishop-white.png"));
+            whiteImages[3] = ImageIO.read(new File("NewYear_src/chess-rook-white.png"));
+            whiteImages[4] = ImageIO.read(new File("NewYear_src/chess-queen-white.png"));
+            whiteImages[5] = ImageIO.read(new File("NewYear_src/chess-king-white.png"));
 
             // load all black images
-            blackImages[0] = ImageIO.read(new File("PIECES/BLACK_PAWN.PNG"));
-            blackImages[1] = ImageIO.read(new File("PIECES/BLACK_KNIGHT.PNG"));
-            blackImages[2] = ImageIO.read(new File("PIECES/BLACK_BISHOP.PNG"));
-            blackImages[3] = ImageIO.read(new File("PIECES/BLACK_ROOK.PNG"));
-            blackImages[4] = ImageIO.read(new File("PIECES/BLACK_QUEEN.PNG"));
-            blackImages[5] = ImageIO.read(new File("PIECES/BLACK_KING.PNG"));
-
+            blackImages[0] = ImageIO.read(new File("NewYear_src/chess-pawn-black.png"));
+            blackImages[1] = ImageIO.read(new File("NewYear_src/chess-knight-black.png"));
+            blackImages[2] = ImageIO.read(new File("NewYear_src/chess-bishop-black.png"));
+            blackImages[3] = ImageIO.read(new File("NewYear_src/chess-rook-black.png"));
+            blackImages[4] = ImageIO.read(new File("NewYear_src/chess-queen-black.png"));
+            blackImages[5] = ImageIO.read(new File("NewYear_src/chess-king-black.png"));
             // set the white and black images in the Piece class
             Piece.setBlackImages(blackImages);
             Piece.setWhiteImages(whiteImages);
@@ -98,7 +85,7 @@ public class NewyearDecorator extends Decorator {
             // status = GamePanel.GameStatus.Error;
             // create a message to inform the use about the error
             String message = "Could not load piece images. " +
-                    "Check that all 12 images exist in the PIECES folder " +
+                    "Check that all 12 images exist in the folder " +
                     "and are accessible to the program.\n" +
                     "The program will not function properly until this is resolved.\n\n" +
                     "Error details: " + e.getMessage();
@@ -115,7 +102,7 @@ public class NewyearDecorator extends Decorator {
         super.drawBoard(g, sW, sH);
         addNewYearTheme(g, sW, sH);
         super.loadImage();
-        loadImages();
+        loadNewYearImages();
     }
 
 }

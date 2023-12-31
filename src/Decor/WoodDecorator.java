@@ -31,7 +31,7 @@ public class WoodDecorator extends Decorator {
             BufferedImage[] blackImages = new BufferedImage[6];
 
             // if the PIECES folder doesn't exist, create it
-            File directory = new File ("wood_src");
+            File directory = new File ("Wood2_src");
             if (!directory.exists()) {
                 if (directory.mkdir()) {
                     // the directory will be empty, so throw an exception
@@ -42,20 +42,20 @@ public class WoodDecorator extends Decorator {
 
 
             // load all white images
-            whiteImages[0] = ImageIO.read(new File("wood_src/wpawn.png"));
-            whiteImages[1] = ImageIO.read(new File("wood_src/wknight.png"));
-            whiteImages[2] = ImageIO.read(new File("wood_src/wbishop.png"));
-            whiteImages[3] = ImageIO.read(new File("wood_src/wrook.png"));
-            whiteImages[4] = ImageIO.read(new File("wood_src/wqueen.png"));
-            whiteImages[5] = ImageIO.read(new File("wood_src/wking.png"));
+            whiteImages[0] = ImageIO.read(new File("Wood2_src/w-pawn.png"));
+            whiteImages[1] = ImageIO.read(new File("Wood2_src/w-knight.png"));
+            whiteImages[2] = ImageIO.read(new File("Wood2_src/w-bishop.png"));
+            whiteImages[3] = ImageIO.read(new File("Wood2_src/w-rook.png"));
+            whiteImages[4] = ImageIO.read(new File("Wood2_src/w-queen.png"));
+            whiteImages[5] = ImageIO.read(new File("Wood2_src/w-king.png"));
 
             // load all black images
-            blackImages[0] = ImageIO.read(new File("wood_src/bpawn.png"));
-            blackImages[1] = ImageIO.read(new File("wood_src/bknight.png"));
-            blackImages[2] = ImageIO.read(new File("wood_src/bbishop.png"));
-            blackImages[3] = ImageIO.read(new File("wood_src/brook.png"));
-            blackImages[4] = ImageIO.read(new File("wood_src/bqueen.png"));
-            blackImages[5] = ImageIO.read(new File("wood_src/bking.png"));
+            blackImages[0] = ImageIO.read(new File("Wood2_src/b-pawn.png"));
+            blackImages[1] = ImageIO.read(new File("Wood2_src/b-knight.png"));
+            blackImages[2] = ImageIO.read(new File("Wood2_src/b-bishop.png"));
+            blackImages[3] = ImageIO.read(new File("Wood2_src/b-rook.png"));
+            blackImages[4] = ImageIO.read(new File("Wood2_src/b-queen.png"));
+            blackImages[5] = ImageIO.read(new File("Wood2_src/b-king.png"));
 
             // set the white and black images in the Piece class
             Piece.setBlackImages(blackImages);
