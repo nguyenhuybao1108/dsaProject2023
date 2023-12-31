@@ -29,7 +29,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
 
 
-    private enum GameStatus {Idle, Error, Started, Checkmate, Stalemate};
+    public  enum GameStatus {Idle, Error, Started, Checkmate, Stalemate};
 
     GameStatus status = GameStatus.Idle;
     boolean imagesLoaded = false;

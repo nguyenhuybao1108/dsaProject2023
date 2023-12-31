@@ -12,7 +12,6 @@ public class Move {
     private Point moveTo;
     private Piece toCapture;
     private Piece InitialLocation;
-    private Linkedlist linkedlist;
     
     /**
      * Creates a new move object

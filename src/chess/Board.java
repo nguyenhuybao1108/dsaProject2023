@@ -5,10 +5,6 @@ import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Stack;
-/**
- * Contains all the game pieces and general game rule logic
- * @author Paul
- */
 public class Board implements Serializable, Cloneable {
     private Board previousState = null;
     private Piece.Color turn;
@@ -19,10 +15,16 @@ public class Board implements Serializable, Cloneable {
     private Piece lastMoved = null;
     private Ai ai = null;
     private Stack<Move> moveHistory = new Stack<>();
+    private Stack<Piece> currentPiece = new Stack<>();
+    private Stack <Point> moveTo = new Stack<>();
+    private Stack<Piece.Color> nextTurn = new Stack<>();
+    private Stack<Piece> InCheck = new Stack<>();
+    private Stack<Board> currentState = new Stack<>();
     Point moveFrom;
   TurnList turnList = new TurnList();
   PieceList pieceList = new PieceList();
   InCheckList inCheckList = new InCheckList();
+  Board changeBoard;
 
     /**
      * Sets an Ai for the board
@@ -428,20 +430,91 @@ public class Board implements Serializable, Cloneable {
 
     public void Undo(GamePanel gp){
         if(pieceList.isEmpty()){
+           // this.previousState = changeBoard.getPreviousState();
             return;
         }
+        currentState.push(this.clone());
         Board previousBoard = this.getPreviousState();
+
+        nextTurn.push(turnList.getTurn());
+        currentPiece.push(pieceList.getPiece());
+        InCheck.push(inCheckList.getInCheck());
         this.turn = turnList.getTurn();
         turnList.RemoveFirst();
         this.inCheck = inCheckList.getInCheck();
         inCheckList.RemoveFirst();
         this.lastMoved = pieceList.getPiece();
         pieceList.RemoveFirst();
-        this.pieces = new ArrayList<>(previousBoard.getPieces());
+        this.pieces = new ArrayList<>(previousBoard.getPieces());;
+        moveTo.push(lastMoved.getLocation());
         lastMoved = null;
         gp.getBoard().setPreviousState(previousBoard);
-        gp.paintImmediately(0, 0 , gp.getWidth(), gp.getHeight());
+        gp.repaint();
+
     }
+
+    public void setChangeBoard(Board changeBoard) {
+        this.changeBoard = changeBoard;
+    }
+
+    public Board getChangeBoard() {
+        return changeBoard;
+    }
+
+//    public void Redo(GamePanel gp){
+//
+//        if(currentPiece.isEmpty() && nextTurn.isEmpty() && InCheck.isEmpty()){
+//            return;
+//        }
+//
+//
+//        Board currentBoard = changeBoard.clone();
+//        pieceList.InsertFirst(currentPiece.pop());
+//        turnList.InsertFirst(nextTurn.pop());
+//        inCheckList.InsertFirst(InCheck.pop());
+//     //   this.pieces = new ArrayList<>(currentBoard.getPreviousState().getPieces());
+//        this.turn = turnList.getTurn();
+//        this.inCheck = inCheckList.getInCheck();
+//        this.lastMoved = pieceList.getPiece();
+//        System.out.println(lastMoved.getLocation());
+//        this.pieces = new ArrayList<>(currentBoard.getPieces());
+//        changeBoard = this;
+//        gp.getBoard().setState(currentBoard);
+//       gp.repaint();
+//
+//
+//    }
+
+
+    public void Redo(GamePanel gp) {
+        if (currentPiece.isEmpty() || nextTurn.isEmpty() || InCheck.isEmpty()) {
+            return;
+        }
+
+        Board originalState = this.clone();
+
+
+        System.out.println("Before Redo - " + currentPiece.size() + ", " + nextTurn.size() + ", " + InCheck.size());
+        Board currentBoard = currentState.pop();
+        Piece resetPiece = currentPiece.pop();
+        pieceList.InsertFirst(resetPiece);
+        turnList.InsertFirst(nextTurn.pop());
+        inCheckList.InsertFirst(InCheck.pop());
+        this.turn = turnList.getTurn();
+        this.inCheck = inCheckList.getInCheck();
+        this.lastMoved = pieceList.getPiece();
+        this.pieces = new ArrayList<>(currentBoard.getPieces());
+        System.out.println(resetPiece.getLocation());
+        System.out.println("After Redo - " + currentPiece.size() + ", " + nextTurn.size() + ", " + InCheck.size());
+        changeBoard = this;
+        this.setState(changeBoard);
+        gp.getBoard().setState(currentBoard);
+        gp.repaint();
+        this.previousState = originalState;
+    }
+
+
+
 
 
 
@@ -449,4 +522,14 @@ public class Board implements Serializable, Cloneable {
         this.previousState = board.getPreviousState();
     }
 
+    public void setState(Board board){
+        this.previousState = board.clone();
 }
+
+public Board getState(){
+       return this.previousState;
+}
+
+
+}
+

@@ -4,6 +4,7 @@ package chessgame;//package chessgame;
 import chess.Board;
 import chess.GamePanel;
 
+import chess.Redo;
 import chess.Undo;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
@@ -151,6 +152,9 @@ private Board board;
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        Redo redo = new Redo(board);
+        redo.Execute(GP);
+        GP.repaint();
 
     }
 
@@ -176,10 +180,9 @@ private Board board;
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-//        Linkedlist.Undo undo = new Linkedlist.Undo(board);
-//       undo.Execute(GP);
         Undo undo = new Undo(board);
         undo.Execute(GP);
+        GP.repaint();
     }
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -189,11 +192,14 @@ private Board board;
         GP = new GamePanel(this.getWidth() , this.getHeight());
         GP.setColorBoard(GamePanel.ColorBoard.D);
         GP.setGameMode(gameMode);
-        if(GP.getGameMode() == GamePanel.GameMode.AI){
+        if (GP.getGameMode() == GamePanel.GameMode.AI){
             GP.newAiGame();
+            GP.gameMode = GamePanel.GameMode.AI;
         }
-        else{
-            GP.newGame();        }
+     if (GP.getGameMode() == GamePanel.GameMode.Human){
+         GP.newGame();
+         GP.gameMode = GamePanel.GameMode.Human;
+     }
         this.dispose();
         Player_screen p = new Player_screen(GP);
         p.setLocationRelativeTo(null);
