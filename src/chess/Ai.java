@@ -3,40 +3,23 @@ package chess;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Serializable;
-/**
- * Contains AI logic for the chess game
- * @author Paul
- */
+
 public class Ai implements Serializable{
     
     private Piece.Color aiColor;
     private int depth;
 
-    /**
-     * Creates a new AI object
-     * @param color
-     * @param depth
-     */
     public Ai(Piece.Color color, int depth) {
         this.aiColor = color;
         this.depth = depth;
     }
     
-    /**
-     * Returns the color of the pieces the AI controls
-     * @return color of the AI pieces
-     */
+
     public Piece.Color getColor() {
         return aiColor;
     }
-    
-    /**
-     * Returns a move for the ai to make based on a min/max algorithm
-     *  with alpha-beta pruning. Based on generic pseudocode explanation of
-     *  algorithm from http://ai-depot.com/articles/minimax-explained/
-     * @param game current state of the board
-     * @return best move
-     */
+
+
     public Move getMove(Board game) {     
         // if given a null board, return null
         if (game == null)
@@ -62,15 +45,7 @@ public class Ai implements Serializable{
         
         return bestMove;
     }
-    
-    /**
-     * Returns the value of the best move for the ai for the given board
-     * @param game game state after the the last player move
-     * @param depth current depth of the analysis
-     * @param alpha best max move
-     * @param beta best min move
-     * @return value of the move
-     */
+
     private int max(Board game, int depth, int alpha, int beta) {
         // end search if game over or depth limit reached
         if (depth == 0)
@@ -102,15 +77,7 @@ public class Ai implements Serializable{
 
         return alpha;
     }
-    
-    /**
-     * Returns the value of the best move for the player for the given board
-     * @param game game state after the last ai move
-     * @param depth current depth of the analysis
-     * @param alpha best max move
-     * @param beta best min move
-     * @return value of the move
-     */
+
     private int min(Board game, int depth, int alpha, int beta) {
         // end search if game over or depth limit reached
         if (depth == 0)
@@ -138,12 +105,7 @@ public class Ai implements Serializable{
         }       
         return beta;
     }
-    
-    /**
-     * Returns all the possible moves for the board.
-     * @param game Board to get moves for
-     * @return list of possible moves.
-     */
+
     private List<Move> getMoves(Board game) {
         // initialize an arraylist
         List<Move> moves = new ArrayList<Move>();
@@ -156,12 +118,7 @@ public class Ai implements Serializable{
                 moves.addAll(p.getValidMoves(game, true));
         return moves;
     }
-    
-    /**
-     * Calculates the value of a board for the AI.
-     * @param gameBoard Board to evaluate
-     * @return value of the board
-     */
+
     private int valueOfBoard(Board gameBoard) {
         int value = 0;
         int aiPieces = 0;
@@ -222,12 +179,7 @@ public class Ai implements Serializable{
 
         return value;
     }
-       
-    /**
-     * A method for evaluating the value of a piece
-     * @param pc piece to evaluate
-     * @return value of the piece 
-     */
+
     private int valueOfPiece(Piece pc) {
         return (int)Math.pow(pc.getImageNumber() + 1, 3) * 100;
     }

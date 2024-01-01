@@ -3,17 +3,12 @@ package chess;
 import LinkednStack.InCheckList;
 import LinkednStack.PieceList;
 import LinkednStack.TurnList;
-import UI.GameWindow;
 
 import java.io.Serializable;
 import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Stack;
-/**
- * Contains all the game pieces and general game rule logic
- * @author Paul
- */
 public class Board implements Serializable, Cloneable {
     private Board previousState = null;
     private Piece.Color turn;
@@ -23,62 +18,47 @@ public class Board implements Serializable, Cloneable {
     private Piece Initial = null;
     private Piece lastMoved = null;
     private Ai ai = null;
-
-    private GameWindow gw;
     private Stack<Move> moveHistory = new Stack<>();
+    private Stack<Piece> currentPiece = new Stack<>();
+    private Stack <Point> moveTo = new Stack<>();
+    private Stack<Piece.Color> nextTurn = new Stack<>();
+    private Stack<Piece> InCheck = new Stack<>();
+    private Stack<Board> currentState = new Stack<>();
     Point moveFrom;
-  TurnList turnList = new TurnList();
-  PieceList pieceList = new PieceList();
-  InCheckList inCheckList = new InCheckList();
+    TurnList turnList = new TurnList();
+    PieceList pieceList = new PieceList();
+    InCheckList inCheckList = new InCheckList();
+    Board changeBoard;
 
-    /**
-     * Sets an Ai for the board
-     * @param computerPlayer
-     */
+
     public void setAi(Ai computerPlayer) {
         this.ai = computerPlayer;
     }
 
-    /**
-     * Returns the Ai object for the board.
-     * @return the Ai object of the board. Null if 2-player game.
-     */
     public Ai getAi() {
         return ai;
     }
 
-    /**
-     * If a king is in check, returns it. Null otherwise.
-     * @return king in check
-     */
     public Piece getPieceInCheck() {
         return inCheck;
     }
 
-    /**
-     * Returns the piece that was moved last;
-     * @return last moved piece
-     */
     public Piece getLastMovedPiece() {
         return lastMoved;
     }
 
-   public Point getInitialPieceLocation(Piece piece){
+    public Point getInitialPieceLocation(Piece piece){
         return piece.getLocation();
-   }
+    }
 
-   public void setInitial(Piece InitialPiece){
+    public void setInitial(Piece InitialPiece){
         this.Initial = InitialPiece;
-   }
+    }
 
-   public Piece getInitialPiece(){
+    public Piece getInitialPiece(){
         return Initial;
-   }
+    }
 
-    /**
-     * Creates a new board object
-     * @param initPieces true to initializa all pieces, false to leave board empty
-     */
     public Board(boolean initPieces) {
         turn = Piece.Color.White;
 
@@ -123,15 +103,6 @@ public class Board implements Serializable, Cloneable {
         }
     }
 
-    /**
-     * Private constructor used to create a deep copy of the board
-     * @param turn the color of the pieces to move next
-     * @param previousState previous state of the board
-     * @param pieces all the pieces on the board
-     * @param lastMoved piece to move last
-     * @param inCheck king in check
-     * @param ai ai present on the board
-     */
     private Board(Piece.Color turn, Board previousState, List<Piece> pieces,
                   Piece lastMoved, Piece inCheck, Ai ai) {
         this.turn = turn;
@@ -146,19 +117,10 @@ public class Board implements Serializable, Cloneable {
         }
     }
 
-    /**
-     * Returns the list of all the pieces on the board
-     * @return List<Piece> containing all pieces on the board
-     */
     public List<Piece> getPieces() {
         return pieces;
     }
 
-    /**
-     * Returns the piece at the specified location
-     * @param p the specified location
-     * @return the piece at the location. null if no piece found
-     */
     public Piece getPieceAt(Point p) {
         for(Piece pc : pieces) {
             if(pc.getLocation().x == p.x &&
@@ -168,10 +130,6 @@ public class Board implements Serializable, Cloneable {
         return null;
     }
 
-    /**
-     * Removes the piece from the board
-     * @param p the piece to remove
-     */
     public void removePiece(Piece p) {
         if (pieces.contains(p)) {
             pieces.remove(p);
@@ -179,18 +137,10 @@ public class Board implements Serializable, Cloneable {
         }
     }
 
-    /**
-     * Adds a piece on to the board
-     * @param p Piece to add
-     */
     public void addPiece(Piece p) {
         pieces.add(p);
     }
 
-    /**
-     * Removes the piece at the given point
-     * @param p Point to remove the piece from
-     */
     public void removePieceAt(Point p) {
         Piece temp = null;
         for(Piece pc : pieces) {
@@ -203,21 +153,10 @@ public class Board implements Serializable, Cloneable {
             pieces.remove(temp);
     }
 
-    /**
-     * Returns the color that has the current turn
-     * @return the color to move next
-     */
     public Piece.Color getTurn() {
         return turn;
     }
 
-    /**
-     * Performs the given move. Does not check validity. Use only moves from
-     *  the Pieces' getValidMoves() methods.
-     * @param m move to perform
-     * @param playerMove whether or not this move is made directly by a human player.
-     * Determines whether a dialog will be shown on pawn promotion.
-     */
     public void doMove(Move m, boolean playerMove) {
         this.previousState = this.clone();
         // implementing en passant rule
@@ -257,13 +196,6 @@ public class Board implements Serializable, Cloneable {
         turn = Piece.Color.values()[(turn.ordinal() + 1) % 2];
     }
 
-    /**
-     * Checks if the given piece is a pawn that needs to be promoted.
-     * If it is an ai piece, automatically promotes it to
-     * @param pawn Piece to check
-     * @param showDialog Whether or not to ask the user what to promote pawn to.
-     * If false, automatically promotes to Queen.
-     */
     private void checkPawnPromotion(Piece pawn, boolean showDialog) {
         if(pawn instanceof Pawn && (pawn.getLocation().y == 0 || pawn.getLocation().y == 7)) {
             Piece promoted;
@@ -303,11 +235,7 @@ public class Board implements Serializable, Cloneable {
         }
     }
 
-    /**
-     * Returns a new board object, with the move executed
-     * @param m move to execute
-     * @return new board
-     */
+
     public Board tryMove(Move m) {
         // creates a copy of the board
         Board helper = this.clone();
@@ -357,12 +285,6 @@ public class Board implements Serializable, Cloneable {
         return null;
     }
 
-    /**
-     * Checks if a move puts a king in check
-     * @param m move to check
-     * @param kingColor color of the king to check
-     * @return true if move puts king in check
-     */
     public boolean movePutsKingInCheck(Move m, Piece.Color kingColor) {
         // create a copy of the board
         Board helper = tryMove(m);
@@ -380,11 +302,6 @@ public class Board implements Serializable, Cloneable {
         return false;
     }
 
-    /**
-     * Checks if either color can make no more moves
-     * @return true can signify either a checkmate or a stalemate.
-     *  Use kingInCheck() to determine which.
-     */
     public boolean gameOver() {
         // create an array for all the moves that can be made by
         // black pieces, white pieces
@@ -393,47 +310,27 @@ public class Board implements Serializable, Cloneable {
 
         // all moves to the arrays for all pieces
         for(Piece p : pieces) {
-            if(p.getColor() == Piece.Color.White) {
-            //    gw.checkmateOccurred(0);
+            if(p.getColor() == Piece.Color.White)
                 whiteMoves.addAll(p.getValidMoves(this, true));
-            }
-            else {
-
-              //  gw.checkmateOccurred(1);
+            else
                 blackMoves.addAll(p.getValidMoves(this, true));
-            }
         }
 
         // if either side can make no valid moves, the game is over
         return (whiteMoves.size() == 0 || blackMoves.size() == 0);
-
     }
 
-    /**
-     * Returns a copy of the Board
-     * @return a copy of this board
-     */
     @Override
     public Board clone() {
         return new Board(turn, previousState, pieces, lastMoved, inCheck, ai);
     }
 
-    /**
-     * Gets the board's last state.
-     * @return state of the board before the last move
-     */
     public Board getPreviousState() {
         if(previousState != null)
             return previousState;
         return this;
     }
 
-    /**
-     * Checks if a position is within the confines of the board.
-     *  Does not check if position is occupied.
-     * @param p point to check validity of
-     * @return true if valid, false if not
-     */
     public boolean validLocation(Point p) {
         return (p.x >= 0 && p.x <= 7) && (p.y >= 0 && p.y <= 7);
     }
@@ -441,25 +338,77 @@ public class Board implements Serializable, Cloneable {
 
     public void getPrevious(GamePanel gp){
         if(pieceList.isEmpty()){
+            // this.previousState = changeBoard.getPreviousState();
             return;
         }
+        currentState.push(this.clone());
         Board previousBoard = this.getPreviousState();
+
+        nextTurn.push(turnList.getTurn());
+        currentPiece.push(pieceList.getPiece());
+        InCheck.push(inCheckList.getInCheck());
         this.turn = turnList.getTurn();
         turnList.RemoveFirst();
         this.inCheck = inCheckList.getInCheck();
         inCheckList.RemoveFirst();
         this.lastMoved = pieceList.getPiece();
         pieceList.RemoveFirst();
-        this.pieces = new ArrayList<>(previousBoard.getPieces());
+        this.pieces = new ArrayList<>(previousBoard.getPieces());;
+        moveTo.push(lastMoved.getLocation());
         lastMoved = null;
         gp.getBoard().setPreviousState(previousBoard);
-        gp.paintImmediately(0, 0 , gp.getWidth(), gp.getHeight());
+        gp.repaint();
+
+    }
+
+    public void setChangeBoard(Board changeBoard) {
+        this.changeBoard = changeBoard;
+    }
+
+    public Board getChangeBoard() {
+        return changeBoard;
     }
 
 
+
+    public void getRedo(GamePanel gp) {
+        if (currentPiece.isEmpty() || nextTurn.isEmpty() || InCheck.isEmpty()) {
+            return;
+        }
+
+        Board originalState = this.clone();
+
+
+        System.out.println("Before Redo - " + currentPiece.size() + ", " + nextTurn.size() + ", " + InCheck.size());
+        Board currentBoard = currentState.pop();
+        Piece resetPiece = currentPiece.pop();
+        pieceList.InsertFirst(resetPiece);
+        turnList.InsertFirst(nextTurn.pop());
+        inCheckList.InsertFirst(InCheck.pop());
+        this.turn = turnList.getTurn();
+        this.inCheck = inCheckList.getInCheck();
+        this.lastMoved = pieceList.getPiece();
+        this.pieces = new ArrayList<>(currentBoard.getPieces());
+        System.out.println(resetPiece.getLocation());
+        System.out.println("After Redo - " + currentPiece.size() + ", " + nextTurn.size() + ", " + InCheck.size());
+        changeBoard = this;
+        this.setState(changeBoard);
+        gp.getBoard().setState(currentBoard);
+        gp.repaint();
+        this.previousState = originalState;
+    }
 
     public void setPreviousState(Board board){
         this.previousState = board.getPreviousState();
     }
+
+    public void setState(Board board){
+        this.previousState = board.clone();
+    }
+
+    public Board getState(){
+        return this.previousState;
+    }
+
 
 }

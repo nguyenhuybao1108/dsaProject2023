@@ -7,7 +7,7 @@ public class TurnList {
     private Node tail;
 
     private class Node {
-       Piece.Color turn;
+        Piece.Color turn;
         Node next;
         Node prev;
 

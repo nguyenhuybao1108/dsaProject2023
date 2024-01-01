@@ -255,8 +255,10 @@ public class GameWindow {
 
         final JButton redo = new JButton("Redo");
 
-        undo.addActionListener(new ActionListener() {
+        redo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                GP.Redo();
+                GP.repaint();
             }
         });
 

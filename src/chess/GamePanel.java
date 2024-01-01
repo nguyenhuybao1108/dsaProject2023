@@ -23,11 +23,6 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.util.List;
 
-/**
- * A component for playing a game of chess. A subclass of JComponent.
- * Implements MouseListener.
- * @author Paul
- */
 public class GamePanel extends JComponent implements MouseListener, IComponent {
     public enum ColorBoard{C ,N, W, D};
     public ColorBoard colorBoard;
@@ -59,11 +54,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
     final Color lightColor = new Color(255,255,255,255);
     final Color darkColor = new Color(0,0,0,255);
 
-    /**
-     * Creates a new BoardPanel component
-     * @param w width in pixels
-     * @param h height in pixels
-     */
     public GamePanel(int w, int h) {
         // set the size of the component
         this.setSize(w, h);
@@ -75,9 +65,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         this.addMouseListener(this);
     }
 
-    /**
-     * Sets up a new 2-Player game in the panel
-     */
     public void newGame() {
        setGameMode(GameMode.Human);
         if(this.colorBoard == null){
@@ -98,10 +85,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
     public int getAiDepth() {
         return aiDepth;
     }
-
-    /**
-     * Sets up a new 1-Player game in the panel
-     */
 
     int aiDepth;
 
@@ -164,9 +147,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
             mousePressed(null);
     }
 
-    /**
-     * Load the state of the board from file
-     */
     public void loadBoard() {
         // reset cariables
         selectedPiece = null;
@@ -238,9 +218,7 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         this.repaint();
     }
 
-    /**
-     * Saves the state of the board to a file
-     */
+
     public void saveBoard() {
         try {
             // asks the user for a save name
@@ -301,18 +279,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
 
     }
 
-    /**
-     * Returns the board to it's previous state
-     */
-
-
-    /**
-     * Loads the piece images from a default folder.
-     * ImageIO syntax from:
-     * http://java.sun.com/docs/books/tutorial/2d/images/loadimage.html
-     */
-
-
     public void loadImage(){
         try {
             // initialize two arrays of bufferedImages
@@ -370,10 +336,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
 
     }
 
-    /**
-     * Responds to a mousePressed event
-     * @param e
-     */
     public void mousePressed(MouseEvent e) {
         if (status == GameStatus.Started) {
             invalidPiece = null;
@@ -462,12 +424,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         }
     }
 
-    /**
-     * Overrides the default paintComponent method.
-     * Idea from:
-     * http://en.allexperts.com/q/Java-1046/repaint.htm
-     * @param gr the Graphics object to paint to
-     */
     @Override
     protected void paintComponent(Graphics gr) {
         int w = getWidth();
@@ -498,12 +454,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         gr.drawImage(buffer, 0, 0, this);
     }
 
-    /**
-     * Draws helper circles to graphics object
-     * @param g graphics object to draw to
-     * @param sW width of square
-     * @param sH height of square
-     */
     private void drawHelperCircles(Graphics g, int sW, int sH) {
         // if a piece is selected
         if(selectedPiece != null) {
@@ -542,12 +492,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         }
     }
 
-    /**
-     * Draws pieces to the graphics object
-     * @param g Graphics object to draw to
-     * @param sH height of a square
-     * @param sW width of a square
-     */
     private void drawPieces(Graphics g, int sW, int sH) {
         // for each piece on the board
         for(Piece pc : gameBoard.getPieces()) {
@@ -564,12 +508,6 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         }
     }
 
-    /**
-     * Draws an empty board
-     * @param g Graphics2D object to draw to
-     * @param sW width of a square
-     * @param sH height of a square
-     */
     public void drawBoard(Graphics g, int sW, int sH) {
         // draw a light background
         g.setColor(lightColor);
@@ -589,33 +527,17 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         }
     }
 
-
-
-    /**
-     * Gets the move with a given point as it's destination from the list of moves
-     * @param pt point to look for
-     * @return move with destination at pt
-     */
     private Move moveWithDestination(Point pt) {
         for(Move m : okMoves)
             if(m.getMoveTo().equals(pt))
                 return m;
         return null;
     }
-    /**
-     * Required to implement MouseListener. Not used
-     * @param e
-     */
+
     public void mouseExited(MouseEvent e) { }
-    /**
-     * Required to implement MouseListener. Not used
-     * @param e
-     */
+
     public void mouseEntered(MouseEvent e) { }
-    /**
-     * Required to implement MouseListener. Not used
-     * @param e
-     */
+
     public void mouseReleased(MouseEvent e) { }
 
     public void setColorBoard(ColorBoard color){
@@ -662,5 +584,10 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
                 gameBoard.getPrevious(this);
             } else gameBoard.getPrevious(this);
         }
+    }
+
+    public void Redo(){
+        gameBoard.getRedo(this);
+        repaint();
     }
 }
