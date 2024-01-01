@@ -26,6 +26,7 @@ public class Board implements Serializable, Cloneable {
   InCheckList inCheckList = new InCheckList();
   Board changeBoard;
 
+
     /**
      * Sets an Ai for the board
      * @param computerPlayer
@@ -461,29 +462,6 @@ public class Board implements Serializable, Cloneable {
         return changeBoard;
     }
 
-//    public void Redo(GamePanel gp){
-//
-//        if(currentPiece.isEmpty() && nextTurn.isEmpty() && InCheck.isEmpty()){
-//            return;
-//        }
-//
-//
-//        Board currentBoard = changeBoard.clone();
-//        pieceList.InsertFirst(currentPiece.pop());
-//        turnList.InsertFirst(nextTurn.pop());
-//        inCheckList.InsertFirst(InCheck.pop());
-//     //   this.pieces = new ArrayList<>(currentBoard.getPreviousState().getPieces());
-//        this.turn = turnList.getTurn();
-//        this.inCheck = inCheckList.getInCheck();
-//        this.lastMoved = pieceList.getPiece();
-//        System.out.println(lastMoved.getLocation());
-//        this.pieces = new ArrayList<>(currentBoard.getPieces());
-//        changeBoard = this;
-//        gp.getBoard().setState(currentBoard);
-//       gp.repaint();
-//
-//
-//    }
 
 
     public void Redo(GamePanel gp) {

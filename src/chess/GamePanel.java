@@ -1,8 +1,7 @@
 
 package chess;
 
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
@@ -399,6 +398,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
                         gameBoard.doMove(playerMove, true);
                         selectedPiece = null;
                         okMoves = null;
+
                     } else {
                         // otherwise, ignore click and reset variables
                         selectedPiece = null;
@@ -419,7 +419,7 @@ public class GamePanel extends JComponent implements MouseListener,IComponent {
 
                 if (computerMove != null) {
                     // if a move was returned, make move
-                    gameBoard.doMove(computerMove, false);
+                    gameBoard.doMove(computerMove, false);;
                 }
             }
 
