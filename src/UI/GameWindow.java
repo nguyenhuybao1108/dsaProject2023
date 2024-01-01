@@ -19,7 +19,7 @@ import static java.awt.Color.*;
 public class GameWindow {
     private JFrame gameWindow;
 
-    int undoMove;
+    int undoMove,redoMove;
 
     private int count;
 
@@ -257,6 +257,7 @@ public class GameWindow {
 
         redo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                redoMove++;
                 GP.Redo();
                 GP.repaint();
             }

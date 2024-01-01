@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FONT/FONT.iml" filepath="$PROJECT_DIR$/FONT/FONT.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dsaProject2023.iml" filepath="$PROJECT_DIR$/dsaProject2023.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dsaProject2023_12345.iml" filepath="$PROJECT_DIR$/dsaProject2023_12345.iml" />
     </modules>
   </component>
 </project>
