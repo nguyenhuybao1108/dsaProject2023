@@ -1,8 +1,6 @@
 package UI;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -15,12 +13,15 @@ import chess.Piece;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import static java.awt.Color.*;
+
 
 public class GameWindow {
     private JFrame gameWindow;
 
     int undoMove;
 
+    private int count;
 
     public Clock blackClock;
     public Clock whiteClock;
@@ -49,12 +50,15 @@ public class GameWindow {
             System.out.println("Game file lion.png not found");
         }
 
+        gameWindow.getContentPane().setBackground(getHSBColor(165, 0.002F, 0.87F));
+
         gameWindow.setLocation(300, 100);
 
         gameWindow.setLayout(new BorderLayout(30, 20));
 
         // Game Data window
         JPanel gameData = gameDataPanel(blackName, whiteName, hh, mm, ss);
+        gameData.setBackground(getHSBColor(165, 0.002F, 0.87F));
         gameData.setSize(gameData.getPreferredSize());
         gameWindow.add(gameData, BorderLayout.NORTH);
 
@@ -64,8 +68,8 @@ public class GameWindow {
         gameWindow.add(sideButtons(), BorderLayout.EAST);
 
         gameWindow.setMinimumSize(gameWindow.getPreferredSize());
-        gameWindow.setResizable(true);
-        gameWindow.setSize(1000, 700);
+        gameWindow.setResizable(false);
+        gameWindow.setSize(600, 600);
 
         // gameWindow.pack();
         gameWindow.setVisible(true);
@@ -78,10 +82,7 @@ public class GameWindow {
                                  final int hh, final int mm, final int ss) {
 
         JPanel gameData = new JPanel();
-        gameData.setLayout(new GridLayout(3, 2, 0, 0));
-
-
-        // PLAYER NAMES
+       gameData.setLayout(new GridLayout(3, 2,  10, 10));
 
         JLabel w = new JLabel(wn);
         JLabel b = new JLabel(bn);
@@ -170,8 +171,7 @@ public class GameWindow {
     private JPanel downButtons() {
 
         JPanel downButtons = new JPanel();
-        downButtons.setLayout(new GridLayout(1, 4, 10, 10));
-
+     //   gameWindow.setLayout(null);
         final JButton quit = new JButton("Quit");
 
         quit.addActionListener(new ActionListener() {
@@ -224,7 +224,13 @@ public class GameWindow {
         downButtons.add(instr);
         downButtons.add(nGame);
         downButtons.add(quit);
-
+        downButtons.setBackground(getHSBColor(165, 0.002F, 0.87F));
+        instr.setBackground(gray);
+        instr.setLocation(300, 600);
+        nGame.setLocation(500, 600);
+        quit.setLocation(800,600);
+        nGame.setBackground(gray);
+        quit.setBackground(gray);
         downButtons.setPreferredSize(downButtons.getMinimumSize());
 
         return downButtons;
@@ -232,7 +238,7 @@ public class GameWindow {
 
     private JPanel sideButtons() {
         JPanel sideButtons = new JPanel();
-        sideButtons.setLayout(new GridLayout(7, 5, 10, 10));
+        sideButtons.setLayout(new GridLayout(10, 10, 50, 30));
 
         final JButton undo = new JButton("Undo");
 
@@ -251,38 +257,39 @@ public class GameWindow {
             }
         });
 
+        final JButton theme = new JButton("Theme");
+
+        theme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                count++;
+                if(count == 1){
+                    GP.setColorBoard(GamePanel.ColorBoard.C);
+                    GP.repaint();
+                }
+                if(count == 2){
+                    GP.setColorBoard(GamePanel.ColorBoard.N);
+                    GP.repaint();
+                }
+                if(count == 3){
+                    GP.setColorBoard(GamePanel.ColorBoard.D);
+                    GP.repaint();
+                    count = 0;
+                }
+            }
+        });
         sideButtons.add(undo);
         sideButtons.add(redo);
-        sideButtons.setSize(200, 100);
-        //sideButtons.setPreferredSize(sideButtons.getMinimumSize());
+        sideButtons.add(theme);
+        sideButtons.setBackground(getHSBColor(165, 0.002F, 0.87F));
+        undo.setBackground(GRAY);
+        redo.setBackground(GRAY);
+        theme.setBackground(GRAY);
+
+
+        sideButtons.setSize(100, 100);
+        sideButtons.setLocation(12,371);
 
         return sideButtons;
     }
-//    public void checkmateOccurred(int c) {
-//        if (c == 0) {
-//            if (timer != null) timer.stop();
-//            int n = JOptionPane.showConfirmDialog(
-//                    gameWindow,
-//                    "White wins by checkmate! Set up a new game? \n" +
-//                            "Choosing \"No\" lets you look at the final situation.",
-//                    "White wins!",
-//                    JOptionPane.YES_NO_OPTION);
-//
-//            if (n == JOptionPane.YES_OPTION) {
-//                SwingUtilities.invokeLater(new StartMenu());
-//                gameWindow.dispose();
-//            }
-//        } else {
-//            if (timer != null) timer.stop();
-//            int n = JOptionPane.showConfirmDialog(
-//                    gameWindow,
-//                    "Black wins by checkmate! Set up a new game? \n" +
-//                            "Choosing \"No\" lets you look at the final situation.",
-//                    "Black wins!",
-//                    JOptionPane.YES_NO_OPTION);
-//
-//            if (n == JOptionPane.YES_OPTION) {
-//                SwingUtilities.invokeLater(new StartMenu());
-//                gameWindow.dispose();
-//            }
-        }
+}
