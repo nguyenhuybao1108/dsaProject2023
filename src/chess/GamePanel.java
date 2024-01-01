@@ -325,19 +325,7 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
                 if (directory.mkdir()) {
                     // the directory will be empty, so throw an exception
                     throw new Exception("The PIECES directory did not exist. " +
-                            "It has been created. Ensure that it contains the following files: \n" +
-                            "WHITE_PAWN.PNG\n" +
-                            "WHITE_KNIGHT.PNG\n" +
-                            "WHITE_BISHOP.PNG\n" +
-                            "WHITE_ROOK.PNG\n" +
-                            "WHITE_QUEEN.PNG\n" +
-                            "WHITE_KING.PNG\n" +
-                            "BLACK_PAWN.PNG\n" +
-                            "BLACK_KNIGHT.PNG\n" +
-                            "BLACK_BISHOP.PNG\n" +
-                            "BLACK_ROOK.PNG\n" +
-                            "BLACK_QUEEN.PNG\n" +
-                            "BLACK_KING.PNG");
+                            "It has been created. Ensure that it contains the files: \n");
                 }
             }
 
