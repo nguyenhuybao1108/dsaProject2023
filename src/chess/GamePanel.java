@@ -301,16 +301,16 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
             whiteImages[1] = ImageIO.read(new File("PIECES/WHITE_KNIGHT.PNG"));
             whiteImages[2] = ImageIO.read(new File("PIECES/WHITE_BISHOP.PNG"));
             whiteImages[3] = ImageIO.read(new File("PIECES/WHITE_ROOK.PNG"));
-            whiteImages[4] = ImageIO.read(new File("PIECES/WHITE_QUEEN.PNG"));
-            whiteImages[5] = ImageIO.read(new File("PIECES/WHITE_KING.PNG"));
+            whiteImages[4] = ImageIO.read(new File("PIECES/WHITE_KING.PNG"));
+            whiteImages[5] = ImageIO.read(new File("PIECES/WHITE_QUEEN.PNG"));
 
             // load all black images
             blackImages[0] = ImageIO.read(new File("PIECES/BLACK_PAWN.PNG"));
             blackImages[1] = ImageIO.read(new File("PIECES/BLACK_KNIGHT.PNG"));
             blackImages[2] = ImageIO.read(new File("PIECES/BLACK_BISHOP.PNG"));
             blackImages[3] = ImageIO.read(new File("PIECES/BLACK_ROOK.PNG"));
-            blackImages[4] = ImageIO.read(new File("PIECES/BLACK_QUEEN.PNG"));
-            blackImages[5] = ImageIO.read(new File("PIECES/BLACK_KING.PNG"));
+            blackImages[4] = ImageIO.read(new File("PIECES/BLACK_KING.PNG"));
+            blackImages[5] = ImageIO.read(new File("PIECES/BLACK_QUEEN.PNG"));
 
             // set the white and black images in the Piece class
             Piece.setBlackImages(blackImages);
