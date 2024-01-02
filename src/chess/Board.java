@@ -377,8 +377,6 @@ public class Board implements Serializable, Cloneable {
         }
 
         Board originalState = this.clone();
-
-
         System.out.println("Before Redo - " + currentPiece.size() + ", " + nextTurn.size() + ", " + InCheck.size());
         Board currentBoard = currentState.pop();
         Piece resetPiece = currentPiece.pop();
@@ -408,6 +406,10 @@ public class Board implements Serializable, Cloneable {
 
     public Board getState(){
         return this.previousState;
+    }
+
+    public  void setTurn(Piece.Color turn){
+        this.turn = turn;
     }
 
 

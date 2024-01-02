@@ -258,7 +258,7 @@ public class GameWindow {
         redo.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 redoMove++;
-                GP.Redo();
+                GP.Redo(redoMove);
                 GP.repaint();
             }
         });

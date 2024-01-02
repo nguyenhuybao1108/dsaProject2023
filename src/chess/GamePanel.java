@@ -586,10 +586,48 @@ public class GamePanel extends JComponent implements MouseListener, IComponent {
         }
     }
 
-    public void Redo(){
-        gameBoard.getRedo(this);
-        repaint();
+//    public void Redo(){
+//        gameBoard.getRedo(this);
+//        repaint();
+//    }
+
+    public void Redo(int num) {
+
+        if (this.getBoard().getAi() == null) {;
+           this.getBoard().getRedo(this);
+           if(this.gameBoard.getTurn() == Piece.Color.White){
+               this.gameBoard.setTurn(Piece.Color.Black);
+           }
+           else{
+               this.gameBoard.setTurn(Piece.Color.White);
+           }
+
+            repaint();
+        }
+        if(this.getBoard().getAi() != null) {
+            if (aiDepth == 3) {
+                if (num <= 3) {
+                    System.out.println(num);
+                    if (gameBoard.getTurn() != gameBoard.getAi().getColor()) {
+                        gameBoard.getRedo(this);
+                        gameBoard.getRedo(this);
+                        gameBoard.setTurn(gameBoard.getPreviousState().getTurn());
+                    } else gameBoard.getRedo(this);
+                }
+                else System.out.println("Cannot undo");
+            }
+            else if (aiDepth == 4) {
+                return;
+            } else {
+                if (gameBoard.getTurn() != gameBoard.getAi().getColor()) {
+                    gameBoard.getRedo(this);
+                    gameBoard.getRedo(this);
+                    gameBoard.setTurn(gameBoard.getPreviousState().getTurn());
+                } else gameBoard.getRedo(this);
+            }
+        }
     }
+
 
 
 }
