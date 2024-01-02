@@ -1,3 +1,9 @@
+/* Name: GROUP 8 
+    Ma Phung Nghia - ITCSIU2106
+    Huynh Thi Ngoc Tram - ITCSIU21238
+    Nguyen Huy Bao - 
+    Purpose : create a game apply data structure and all knowledge about coding*/
+
 package Decor;
 
 import Decor.Decorator;
