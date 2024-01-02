@@ -72,6 +72,7 @@ public class GameWindow {
         gameWindow.setSize(650, 650);
 
         // gameWindow.pack();
+        gameWindow.setLocationRelativeTo(null);
         gameWindow.setVisible(true);
         gameWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
