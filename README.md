@@ -1,7 +1,10 @@
-java-chess
-==========
-Chess game in Java using the minimax algorithm with alpha-beta pruning for AI, with a basic GUI for playing.
+HOW TO PLAY THE GAME:
 
-[Java programming project][1] course work at University of Helsinki (Summer 2010).
+STEP 1: Cloning the " main " branch from git hub
 
-[1]:http://www.cs.helsinki.fi/courses/58160/2010/v/a/2
+STEP 2: Go to the package " src "
+
+STEP 3: In the package " src " , please go the to package " UI "
+
+STEP 4: In the package " UI " , please choose the class " Game " and run it
+
